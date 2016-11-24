@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mi primer script en PHP</title>
+</head>
+<body bgcolor="#BCF9FB">
+
+	<div align='center'>
+
+		<p>Deposito</p>
+		
+		Nombre 
+		<input type="text"   id="nombre">
+		Cantidad 
+		<input type="text"   id="cantidad"><br><br><br>
+
+		
+		<button onclick='insertar(this)'> Insertar</button><br>
+		<button onclick='modificar(this)'> Modificar</button><br>
+		<button onclick='eliminar(this)'> Eliminar</button>
+		
+		<br> <br>  
+
+		<div id="id01"></div>
+		<div id="result"></div>
+
+		<script>	
+			var xmlhttp = new XMLHttpRequest();
+			var url = "verdepositojson.php";
+
+			xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("id01").innerHTML = this.responseText;
+				}
+			};
+
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+
+			function mostrar(varclik) {
+
+				var c = varclik.innerHTML;
+				var cantidad;
+				var nombre;
+
+
+				var paso;
+				for (paso = 0; paso < 2; paso++) {
+					c = c.replace('<td>', '');
+					c = c.replace('</td>', '');
+
+					for (pas = 0; pas < 2; pas++) {
+						c = c.replace("\"","");
+					};
+				};
+
+				var y = c.split(" ");
+				
+				if(y[4]!=null){
+					var n = y[1]+" "+y[2];
+					var c = y[4];
+				}else{
+					var n = y[1] ;
+					var c = y[3];
+				}
+
+
+				document.getElementById("cantidad").value = c;
+				document.getElementById("nombre").value = n;
+
+			//	document.getElementById("txtNombre").innerHTML = ;
+		}
+
+
+
+		function poll() {
+
+			var xmlhttp = new XMLHttpRequest();
+			var url = "verdepositojson.php";
+
+			xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("id01").innerHTML = this.responseText;
+				}
+			};
+
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+		}
+
+
+
+
+
+		function insertar(varclik) {
+
+			var nombre = document.getElementById("nombre").value;
+			var cantidad = document.getElementById("cantidad").value;
+
+
+			var url = "adepajax.php?nombre="+nombre+"&cantidad="+cantidad;
+			xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("result").innerHTML = this.responseText;
+					poll();
+				}
+			};
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+
+
+			document.getElementById("nombre").value="";
+			document.getElementById("cantidad").value="";
+			document.getElementById("result").value="";
+
+
+
+
+		//	poll();
+
+	}
+
+	function eliminar(varclik){
+
+
+		var nombre = document.getElementById("nombre").value;
+		var cantidad = document.getElementById("cantidad").value;
+
+		var url = "elimpajax.php?nombre="+nombre+"&cantidad="+cantidad;
+		xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("result").innerHTML = this.responseText;
+					poll();
+				}
+			};
+		xmlhttp.open("GET", url, true);
+		xmlhttp.send();
+
+		document.getElementById("nombre").value="";
+		document.getElementById("cantidad").value="";
+		poll();
+	}
+	function modificar(varclik){
+
+
+		var nombre = document.getElementById("nombre").value;
+		var cantidad = document.getElementById("cantidad").value;
+
+		var url = "modpajax.php?nombre="+nombre+"&cantidad="+cantidad;
+		xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("result").innerHTML = this.responseText;
+					poll();
+				}
+			};
+		xmlhttp.open("GET", url, true);
+		xmlhttp.send();
+
+		document.getElementById("nombre").value="";
+		document.getElementById("cantidad").value="";
+		document.getElementById("result").value=this.responseText;
+		poll();
+	}
+
+
+
+
+
+</script>
+</div>
+
+
+
+
+</body>
+</html>
